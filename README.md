@@ -45,22 +45,25 @@ flowchart LR
     end
 
     subgraph ServerVM["Server VM (Alpine Linux)"]
-        API["Node.js REST API\nPort 3000"]
-        ETH0S["eth0 (NAT)"]
+        API["Node.js REST API\n(Port 3000)"]
+        ETH0S["eth0 (NAT)\nInternet Access"]
         ETH1S["eth1 (Internal Network)\n192.168.100.10"]
     end
 
     subgraph ClientVM["Client VM (Alpine Linux)"]
         CLIENT["Node.js Client Service"]
-        ETH0C["eth0 (NAT)"]
+        ETH0C["eth0 (NAT)\nInternet Access"]
         ETH1C["eth1 (Internal Network)\n192.168.100.11"]
     end
 
     VB --> ServerVM
     VB --> ClientVM
 
-    CLIENT -->|HTTP Request| API
+    ETH1C -->|HTTP Request| API
     API -->|JSON Response| CLIENT
+
+    ETH0S -.->|Package Install| Internet
+    ETH0C -.->|Package Install| Internet
 ```
 
 ---
